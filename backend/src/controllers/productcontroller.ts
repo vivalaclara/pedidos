@@ -26,16 +26,16 @@ export const getProducts = async (req: Request, res: Response) => {
 
 // add (adicionar)
 export const addProduct = async (req: Request, res: Response) => {
-  const { id, name, description, price, available_to_buy } = req.body;
-  if (!id || !name || !description || !price || !available_to_buy) {
+  const { name, description, price, available_to_buy } = req.body;
+  if (!name || !description || !price || available_to_buy === undefined) {
     return res.status(400).json({ error: 'Dados inválidos.' });
   }
 
   try {
     const client = await pool.connect();
     await client.query(
-      'INSERT INTO products (id, name, description, price, available_to_buy) VALUES ($1, $2, $3, $4, $5)',
-      [id, name, description, price, available_to_buy]
+      'INSERT INTO products (name, description, price, available_to_buy) VALUES ($1, $2, $3, $4)',
+      [name, description, price, available_to_buy]
     );
     client.release();
     res.status(201).json({ message: 'Produto adicionado com sucesso.' });

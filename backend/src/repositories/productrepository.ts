@@ -19,14 +19,15 @@ export class ProductRepository {
   }
 
   static async addProduct(product: Product): Promise<void> {
-    const { id, name, description, price, available_to_buy } = product;
+    const { name, description, price, available_to_buy } = product;
     const client = await pool.connect();
     await client.query(
-      'INSERT INTO products (id, name, description, price, available_to_buy) VALUES ($1, $2, $3, $4, $5)',
-      [id, name, description, price, available_to_buy]
+      'INSERT INTO products (name, description, price, available_to_buy) VALUES ($1, $2, $3, $4)',
+      [name, description, price, available_to_buy]
     );
     client.release();
   }
+  
 
   static async updateProduct(product: Product): Promise<boolean> {
     const { id, name, description, price, available_to_buy } = product;
